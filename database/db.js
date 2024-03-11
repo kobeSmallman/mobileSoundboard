@@ -5,7 +5,7 @@ const db = SQLite.openDatabase('soundboard.db');
 const defaultSounds = [
  
 ];
-
+// Initializes the database by creating a sounds table if it does not already exist
 const initDB = () => {
   db.transaction((tx) => {
     tx.executeSql(
@@ -16,7 +16,7 @@ const initDB = () => {
       );`,
       [],
       (_, success) => {
-        console.log("Table created successfully or already exists.");
+        console.log("Table created successfully or already exists");
         // Insert default sounds if not present
         defaultSounds.forEach(sound => {
           tx.executeSql(`SELECT * FROM sounds WHERE uri = ?;`, [sound.uri], (_, { rows }) => {
@@ -30,7 +30,7 @@ const initDB = () => {
     );
   });
 };
-
+// Adds a new sound to the database with the specified label and URI
 const addSound = (label, uri, callback) => {
   db.transaction(
     (tx) => {
@@ -49,7 +49,7 @@ const fetchSounds = (callback) => {
     });
   }, (error) => console.log("Error fetching sounds: ", error));
 };
-
+// Updates the label of a sound by its ID
 const updateSoundLabel = (id, label, callback) => {
   db.transaction((tx) => {
     tx.executeSql("UPDATE sounds SET label = ? WHERE id = ?;", [label, id], () => {
@@ -57,7 +57,7 @@ const updateSoundLabel = (id, label, callback) => {
     });
   }, (error) => console.log("Error updating sound label: ", error));
 };
-
+// Deletes a sound from the database by its ID
 const deleteSound = (id, callback) => {
   db.transaction((tx) => {
     tx.executeSql("DELETE FROM sounds WHERE id = ?;", [id], () => {
